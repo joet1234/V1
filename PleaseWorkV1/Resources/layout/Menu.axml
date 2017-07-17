@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:background="#FFFFFF">
+    <Button
+        android:id="@+id/timetableBTN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Timetable" />
+    <Button
+        android:id="@+id/absence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Absence + Leave"
+        android:onClick="AbsenceClick" />
+    <Button
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:onClick="SettingsClick" />
+    <Button
+        android:id="@+id/Logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:onClick="Logout" />
+</LinearLayout>

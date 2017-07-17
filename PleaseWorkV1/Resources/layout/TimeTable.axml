@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:background="#000">
+    <TextView
+        android:id="@+id/date"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Hello" />
+    <Button
+        android:id="@+id/SelectDate"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Select Date" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:background="#ffffff">
+    <!-- Row 2 with 2 columns -->
+        <TableRow
+            android:id="@+id/RowOne"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+            <TextView
+                android:id="@+id/MondayGrid"
+                android:text="Monday"
+                android:background="#dcdcdc"
+                android:textColor="#000000"
+                android:padding="20dip"
+                android:gravity="center" />
+            <ListView
+                android:id="@+id/MondayList"
+                android:layout_weight="1"
+                android:background="#dcdcdc"
+                android:padding="20dip" />
+        </TableRow>
+        <ListView
+            android:id="@+id/NotesList"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="#dcdcdc"
+            android:padding="20dip" />
+    </TableLayout>
+</LinearLayout>
