@@ -15,6 +15,7 @@ using PleaseWorkV1.Database;
 using System.Globalization;
 using PleaseWorkV1.DataSets;
 using Newtonsoft.Json;
+using PleaseWorkV1.ListViewAdapters;
 
 namespace PleaseWorkV1
 {
@@ -25,13 +26,13 @@ namespace PleaseWorkV1
         UserInstance User = new UserInstance(); 
         GetConnectionClass Connect = new GetConnectionClass();
 
-        //Create Instance of the Class Display Object 
-        ListView MondaylistOfClass;
-        ListView NotesListOfClass;
-        TextView dateDisplay;
-        Button selectDate;
-        List<ClassInstance> MondaysList = new List<ClassInstance>();
-        List<ClassInstance> NotesList = new List<ClassInstance>();
+        ExpandableListViewAdapter myAdapater;
+        ExpandableListView expandableListView;
+
+        List<string> group = new List<string>();
+        Dictionary<string, List<string>> dicMyMap = new Dictionary<string, List<string>>();
+
+  
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -40,10 +41,8 @@ namespace PleaseWorkV1
             // Create your application here
             SetContentView(Resource.Layout.TimeTable);
 
-            MondaylistOfClass = FindViewById<ListView>(Resource.Id.MondayList);
-            NotesListOfClass = FindViewById<ListView>(Resource.Id.NotesList);
-            dateDisplay = FindViewById<TextView>(Resource.Id.date);
-            selectDate = FindViewById<Button>(Resource.Id.SelectDate);
+            expandableListView = FindViewById<ExpandableListView>(Resource.Id.ListViewExpanded);
+            
 
             // Populate User 
             User = JsonConvert.DeserializeObject<UserInstance>(Intent.GetStringExtra("User"));
@@ -52,49 +51,67 @@ namespace PleaseWorkV1
             DateTime TodaysDate = DateTime.Now;
 
             while (TodaysDate.DayOfWeek != DayOfWeek.Monday) TodaysDate = TodaysDate.AddDays(-1);
-            dateDisplay.Text = TodaysDate.ToLongDateString();
 
-            //Find Current
-            MondaysList = ListsPopulation(TodaysDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
+            // Find Current
+            // MondaysList = ListsPopulation(TodaysDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
+            //Set Data
+            SetData(out myAdapater);
+            expandableListView.SetAdapter(myAdapater);
 
-            ListOfNotes(TodaysDate);
-
-            PopulateListsView(MondaysList);
-
-            //If the button clicked then a popup fragment appears allowing the user to select date
-            selectDate.Click += delegate
-            {
-                DateSelect_OnClick();
+            expandableListView.ChildClick += (s, e) => {
+                Toast.MakeText(this, "Clicked : " + myAdapater.GetChild(e.GroupPosition, e.ChildPosition), ToastLength.Short).Show();
             };
 
 
         }
-        
-        private void PopulateListsView(List<ClassInstance> Temp)
+
+        private void SetData(out ExpandableListViewAdapter mAdapter)
         {
-            ListViewTimeTableAdapter myAdapter = new ListViewTimeTableAdapter(this, Temp);
+            List<string> groupA = new List<string>();
 
-            MondaylistOfClass.Adapter = myAdapter;
+
+            List<string> groupB = new List<string>();
+            groupB.Add("B-1");
+            groupB.Add("B-2");
+            groupB.Add("B-3");
+
+            List<string> groupC = new List<string>();
+            groupC.Add("C-1");
+            groupC.Add("C-2");
+            groupC.Add("C-3");
+
+            List<string> groupD = new List<string>();
+            groupD.Add("D-1");
+            groupD.Add("D-2");
+            groupD.Add("D-3");
+
+            List<string> groupE = new List<string>();
+            groupE.Add("E-1");
+            groupE.Add("E-2");
+            groupE.Add("E-3");
+
+
+
+            group.Add("Monday");
+            group.Add("Tuesday");
+            group.Add("Wednesday");
+            group.Add("Thursday");
+            group.Add("Friday");
+
+
+            dicMyMap.Add(group[0], groupA);
+            dicMyMap.Add(group[1], groupB);
+            dicMyMap.Add(group[2], groupA);
+            dicMyMap.Add(group[3], groupB);
+            dicMyMap.Add(group[4], groupA);
+
+
+            mAdapter = new ExpandableListViewAdapter(this, group, dicMyMap);
+
+
+
+
         }
-
-        private void PopulateListViewNotes(List<ClassInstance> Temp)
-        {
-            NotesListViewAdapter myAdapter = new NotesListViewAdapter(this, Temp);
-
-            NotesListOfClass.Adapter = myAdapter;
-        }
-
-        private void ListOfNotes(DateTime Date)
-        {
-            for (int i = 0; i <= 6; i++)
-            {
-                NotesList.AddRange(FindNotesForDay(Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)));
-                Date = Date.AddDays(+1);
-            }
-
-            PopulateListViewNotes(NotesList);
-        }
-
         private List<ClassInstance> FindNotesForDay(String date)
         {
             string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Year = '" + User.IntakeYear.ToString() + "' AND Cohort = '" + User.Cohort + "' AND Notes IS NOT NULL";
@@ -134,21 +151,6 @@ namespace PleaseWorkV1
             }
             return Temp;
         }
-       
-        private void DateSelect_OnClick()
-        {
-            DatePickerFragment frag = DatePickerFragment.NewInstance(delegate (DateTime SelectedDate)
-            {
-                while (SelectedDate.DayOfWeek != DayOfWeek.Monday) SelectedDate = SelectedDate.AddDays(-1);
-                dateDisplay.Text = SelectedDate.ToLongDateString();
-
-                MondaysList = ListsPopulation(SelectedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-                
-                PopulateListsView(MondaysList);
-                
-
-            });
-            frag.Show(FragmentManager, DatePickerFragment.TAG);
-        }
+     
     }
 }
