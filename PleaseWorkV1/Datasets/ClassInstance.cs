@@ -2,7 +2,7 @@
 
 namespace PleaseWorkV1.Datasets
 {
-    class ClassInstance
+    public class ClassInstance
     {
         public String StartDate { set; get; }
         public String StartTime { set; get; }

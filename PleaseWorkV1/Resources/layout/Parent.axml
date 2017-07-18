@@ -7,6 +7,6 @@
         android:id="@+id/ParentTVID"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textAllCaps="true" />
 </LinearLayout>
