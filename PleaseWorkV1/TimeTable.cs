@@ -29,9 +29,8 @@ namespace PleaseWorkV1
         ExpandableListViewAdapter myAdapater;
         ExpandableListView expandableListView;
         TextView StartMonday;
+        Button b1; 
 
-        List<string> group = new List<string>();
-        Dictionary<string, List<ClassInstance>> dicMyMap = new Dictionary<string, List<ClassInstance>>();
 
   
 
@@ -44,6 +43,7 @@ namespace PleaseWorkV1
 
             expandableListView = FindViewById<ExpandableListView>(Resource.Id.ListViewExpanded);
             StartMonday = FindViewById<TextView>(Resource.Id.TextViewStartDateMonday);
+            b1 = FindViewById<Button>(Resource.Id.SelectDateButton);
 
             // Populate User 
             User = JsonConvert.DeserializeObject<UserInstance>(Intent.GetStringExtra("User"));
@@ -54,24 +54,33 @@ namespace PleaseWorkV1
 
             StartMonday.Text = TodaysDate.ToLongDateString();
 
-             //Set Data
-            SetData(TodaysDate, out myAdapater);
+
+
+
+			//Set Data
+			SetData(TodaysDate, out myAdapater);
 
             expandableListView.SetAdapter(myAdapater);
 
-            expandableListView.ChildClick += (s, e) => {
-                Toast.MakeText(this, "Clicked : " + myAdapater.GetChild(e.GroupPosition, e.ChildPosition), ToastLength.Short).Show();
+			expandableListView.ChildClick += (s, e) =>
+			{
+				Toast.MakeText(this, "Clicked : " + myAdapater.GetChild(e.GroupPosition, e.ChildPosition), ToastLength.Short).Show();
+			};
+
+            b1.Click += delegate {
+                DateSelect_OnClick();
             };
+
+
         }
 
-        private void DateSelect_OnClick()
+        public void DateSelect_OnClick()
         {
             DatePickerFragment frag = DatePickerFragment.NewInstance(delegate (DateTime SelectedDate)
             {
                 while (SelectedDate.DayOfWeek != DayOfWeek.Monday) SelectedDate = SelectedDate.AddDays(-1);
                 StartMonday.Text = SelectedDate.ToLongDateString();
 
-                //Set Data
                 SetData(SelectedDate, out myAdapater);
 
             });
@@ -80,14 +89,22 @@ namespace PleaseWorkV1
 
         private void SetData(DateTime date, out ExpandableListViewAdapter mAdapter)
         {
+
+            Dictionary<string, List<ClassInstance>> dicMyMap = new Dictionary<string, List<ClassInstance>>();
+
+			List<string> group = new List<string>();
+
             group.Add("Monday");
             group.Add("Tuesday");
             group.Add("Wednesday");
             group.Add("Thursday");
             group.Add("Friday");
 
-            
-            dicMyMap.Add(group[0], ListsPopulation(date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)));
+            List<ClassInstance> Mond = new List<ClassInstance>();
+
+            Mond = ListsPopulation(date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
+
+            dicMyMap.Add(group[0], Mond);
 
             date = date.AddDays(+1);
                     
@@ -109,11 +126,35 @@ namespace PleaseWorkV1
 
         }
 
+        private List<ClassInstance> ListsPopulation(String date)
+		{
+            Toast.MakeText(this, date, ToastLength.Short).Show();
+			//string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + 17 / 07 / 17 + "' AND Year = '" + "2" + "' AND Cohort = '" + "C" + "' ";
+
+            string sql = "SELECT * FROM lectures where StartDate = ";
+
+			List<ClassInstance> Temp = new List<ClassInstance>();
+
+			using (MySqlCommand cmd = new MySqlCommand(sql, Connect.GetConnection()))
+			{
+
+				MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+				{
+					ClassInstance c = new ClassInstance(reader["StartTime"].ToString(), reader["EndTime"].ToString(), reader["Subject"].ToString(), reader["Location"].ToString(), reader["Essential"].ToString());
+                    Temp.Add(c);
+				}
+			}
+			return Temp;
+		}
+
         private List<ClassInstance> FindNotesForDay(String date)
         {
-            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Year = '" + User.IntakeYear.ToString() + "' AND Cohort = '" + User.Cohort + "' AND Notes IS NOT NULL";
+            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Year = '" + User.IntakeYear.ToString() + "' AND Cohort = '" + User.Cohort.ToString() + "' AND Notes IS NOT NULL";
 
-            List<ClassInstance> Temp = new List<ClassInstance>();
+			
+			List<ClassInstance> Temp = new List<ClassInstance>();
 
             using (MySqlCommand cmd = new MySqlCommand(sql, Connect.GetConnection()))
             {
@@ -129,25 +170,7 @@ namespace PleaseWorkV1
             return Temp;
         }
 
-            private List<ClassInstance> ListsPopulation(String date)
-        {
-            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Year = '" + User.IntakeYear.ToString() + "' AND Cohort = '" + User.Cohort + "' ";
-
-            List<ClassInstance> Temp = new List<ClassInstance>();
-
-            using (MySqlCommand cmd = new MySqlCommand(sql, Connect.GetConnection()))
-            {
-
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    ClassInstance c = new ClassInstance(reader["StartTime"].ToString(), reader["EndTime"].ToString(), reader["Subject"].ToString(), reader["Location"].ToString(), reader["Essential"].ToString());
-                    Temp.Add(c);
-                }
-            }
-            return Temp;
-        }
+         
      
     }
 }

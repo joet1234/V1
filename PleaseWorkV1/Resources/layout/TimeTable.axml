@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px"
-    android:background="#000">
+    android:background="#C41030">
     <TextView
         android:id="@+id/TextViewStartDateMonday"
         android:layout_height="wrap_content"
@@ -14,7 +14,9 @@
         android:id="@+id/SelectDateButton"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:text="Select Date" />
+        android:text="Select Date"
+        android:background="@drawable/border"
+        android:textColor="#ff000000" />
     <ExpandableListView
         android:id="@+id/ListViewExpanded"
         android:layout_height="wrap_content"

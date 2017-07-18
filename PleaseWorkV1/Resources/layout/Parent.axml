@@ -7,6 +7,8 @@
         android:id="@+id/ParentTVID"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:textColor="#FFFFFF"
-        android:textAllCaps="true" />
+        android:textColor="#000000"
+        android:textAllCaps="true"
+        android:background="@drawable/gradient"
+        android:paddingLeft="5dp" />
 </LinearLayout>
