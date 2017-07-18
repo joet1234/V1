@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using PleaseWorkV1.DataSets;
 using PleaseWorkV1.Datasets;
+using Android.Graphics;
 
 namespace PleaseWorkV1.ListViewAdapters
 {
@@ -82,6 +83,13 @@ namespace PleaseWorkV1.ListViewAdapters
             return result[childPosition].Location;
         }
 
+        public Java.Lang.Object GetChildEssential(int groupPosition, int childPosition)
+        {
+            var result = new List<ClassInstance>();
+            lstChild.TryGetValue(listGroup[groupPosition], out result);
+            return result[childPosition].Essential;
+        }
+
 
         public override long GetChildId(int groupPosition, int childPosition)
             {
@@ -110,16 +118,38 @@ namespace PleaseWorkV1.ListViewAdapters
             TextView SubjectTV = convertView.FindViewById<TextView>(Resource.Id.SubjectIDTV);
             TextView LocationTV = convertView.FindViewById<TextView>(Resource.Id.LocationIDTV);
 
-            string start = (string)GetChildStartTime(groupPosition, childPosition);
-            string end = (string)GetChildEndTime(groupPosition, childPosition);
-            string subject = (string)GetChildSubject(groupPosition, childPosition);
-            string location = (string)GetChildLocation(groupPosition, childPosition);
+            if (GetChildEssential(groupPosition, childPosition).ToString() == "True")
+            {
+                string start = (string)GetChildStartTime(groupPosition, childPosition);
+                string end = (string)GetChildEndTime(groupPosition, childPosition);
+                string subject = (string)GetChildSubject(groupPosition, childPosition);
+                string location = (string)GetChildLocation(groupPosition, childPosition);
 
-            StartTimeTV.Text = start;
-            EndTimeTV.Text = end;
-            SubjectTV.Text = subject;
-            LocationTV.Text = location;
+                StartTimeTV.Text = start;
+                EndTimeTV.Text = end;
+                SubjectTV.Text = subject;
+                LocationTV.Text = location;
 
+                StartTimeTV.SetTextColor(Color.ParseColor("red"));
+                EndTimeTV.SetTextColor(Color.ParseColor("red"));
+                SubjectTV.SetTextColor(Color.ParseColor("red"));
+                LocationTV.SetTextColor(Color.ParseColor("red"));
+
+            }
+            else
+            {
+                string start = (string)GetChildStartTime(groupPosition, childPosition);
+                string end = (string)GetChildEndTime(groupPosition, childPosition);
+                string subject = (string)GetChildSubject(groupPosition, childPosition);
+                string location = (string)GetChildLocation(groupPosition, childPosition);
+
+                StartTimeTV.Text = start;
+                EndTimeTV.Text = end;
+                SubjectTV.Text = subject;
+                LocationTV.Text = location;
+
+            }
+            
             // textViewItem.Text = content;
             return convertView;
             }
