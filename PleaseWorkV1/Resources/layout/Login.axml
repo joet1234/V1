@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/userName"
-                android:hint="Enter Student No"
+                android:hint="Enter Student No."
                 android:outlineProvider="bounds"
                 android:inputType="number"
                 android:textColor="#ff575555"
