@@ -84,11 +84,8 @@ namespace PleaseWorkV1
 			// aapt resource value: 0x7f05000a
 			public const int Intro = 2131034122;
 			
-			// aapt resource value: 0x7f050025
-			public const int ListViewExpanded = 2131034149;
-			
 			// aapt resource value: 0x7f050024
-			public const int ListViewNotes = 2131034148;
+			public const int ListViewExpanded = 2131034148;
 			
 			// aapt resource value: 0x7f050003
 			public const int LocationIDTV = 2131034115;
