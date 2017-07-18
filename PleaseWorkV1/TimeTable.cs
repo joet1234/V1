@@ -25,6 +25,7 @@ namespace PleaseWorkV1
         ClassInstance populateClass = new ClassInstance();
         UserInstance User = new UserInstance(); 
         GetConnectionClass Connect = new GetConnectionClass();
+        Dictionary<string, List<ClassInstance>> dicMyMap;
 
         ExpandableListViewAdapter myAdapater;
         ExpandableListView expandableListView;
@@ -54,18 +55,11 @@ namespace PleaseWorkV1
 
             StartMonday.Text = TodaysDate.ToLongDateString();
 
-
-
-
+            
 			//Set Data
 			SetData(TodaysDate, out myAdapater);
 
-            expandableListView.SetAdapter(myAdapater);
-
-			expandableListView.ChildClick += (s, e) =>
-			{
-				Toast.MakeText(this, "Clicked : " + myAdapater.GetChild(e.GroupPosition, e.ChildPosition), ToastLength.Short).Show();
-			};
+           
 
             b1.Click += delegate {
                 DateSelect_OnClick();
@@ -87,10 +81,13 @@ namespace PleaseWorkV1
             frag.Show(FragmentManager, DatePickerFragment.TAG);
         }
 
+       
+
         private void SetData(DateTime date, out ExpandableListViewAdapter mAdapter)
         {
+            dicMyMap = null; 
 
-            Dictionary<string, List<ClassInstance>> dicMyMap = new Dictionary<string, List<ClassInstance>>();
+            dicMyMap = new Dictionary<string, List<ClassInstance>>();
 
 			List<string> group = new List<string>();
 
@@ -124,16 +121,25 @@ namespace PleaseWorkV1
             
             mAdapter = new ExpandableListViewAdapter(this, group, dicMyMap);
 
+            expandableListView.SetAdapter(myAdapater);
+
+            expandableListView.ChildClick += (s, e) =>
+            {
+                Toast.MakeText(this, "Clicked : " + myAdapater.GetChild(e.GroupPosition, e.ChildPosition), ToastLength.Short).Show();
+            };
+
         }
 
         private List<ClassInstance> ListsPopulation(String date)
 		{
             Toast.MakeText(this, date, ToastLength.Short).Show();
-			//string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + 17 / 07 / 17 + "' AND Year = '" + "2" + "' AND Cohort = '" + "C" + "' ";
 
-            string sql = "SELECT * FROM lectures where StartDate = ";
+            //string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Year = '" + User.IntakeYear + "' AND Cohort = '" + User.Cohort + "' ";
+            Toast.MakeText(this, User.IntakeYear.ToString(), ToastLength.Short).Show(); 
 
-			List<ClassInstance> Temp = new List<ClassInstance>();
+            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Cohort = '" + User.Cohort + "' AND Year = '" + User.IntakeYear + "'; ";
+
+            List<ClassInstance> Temp = new List<ClassInstance>();
 
 			using (MySqlCommand cmd = new MySqlCommand(sql, Connect.GetConnection()))
 			{
