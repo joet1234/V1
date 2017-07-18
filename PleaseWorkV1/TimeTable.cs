@@ -137,7 +137,10 @@ namespace PleaseWorkV1
             //string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Year = '" + User.IntakeYear + "' AND Cohort = '" + User.Cohort + "' ";
             Toast.MakeText(this, User.IntakeYear.ToString(), ToastLength.Short).Show(); 
 
-            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Cohort = '" + User.Cohort + "' AND Year = '" + User.IntakeYear + "'; ";
+            //string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Cohort = '" + User.Cohort + "' AND Year = '" + User.IntakeYear + "'; ";
+
+            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "'; ";
+
 
             List<ClassInstance> Temp = new List<ClassInstance>();
 

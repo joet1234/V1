@@ -17,6 +17,10 @@
         android:text="Select Date"
         android:background="@drawable/border"
         android:textColor="#ff000000" />
+    <ListView
+        android:id="@+id/ListViewNotes"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
     <ExpandableListView
         android:id="@+id/ListViewExpanded"
         android:layout_height="wrap_content"
