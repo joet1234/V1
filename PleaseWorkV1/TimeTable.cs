@@ -139,7 +139,7 @@ namespace PleaseWorkV1
 
             //string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "' AND Cohort = '" + User.Cohort + "' AND Year = '" + User.IntakeYear + "'; ";
 
-            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + date + "'; ";
+            string sql = "SELECT *  FROM  lectures join groupConvert using (Groups) where StartDate = '" + "08/12/2016" + "'; ";
 
 
             List<ClassInstance> Temp = new List<ClassInstance>();
